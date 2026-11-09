@@ -1,0 +1,50 @@
+---
+import '../styles/global.css';
+import { site } from '../site';
+import { url, isTodo, withTodos } from '../lib/util';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Show the small "back to home" header (project pages). */
+  showHeader?: boolean;
+}
+
+const { title, description = site.description, showHeader = true } = Astro.props;
+const year = 2026;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    {
+      showHeader && (
+        <header class="site-header wrap">
+          <a href={url()} set:html={withTodos(site.name)} />
+        </header>
+      )
+    }
+    <main id="main" class="wrap">
+      <slot />
+    </main>
+    <footer class="site-footer wrap">
+      <p>
+        <span set:html={`© ${year} ${withTodos(site.name)}`} />
+        <span aria-hidden="true"> · </span>
+        {isTodo(site.email) ? <span set:html={`Email ${withTodos(site.email)}`} /> : <a href={`mailto:${site.email}`}>Email</a>}
+        <span aria-hidden="true"> · </span>
+        {isTodo(site.github) ? <span set:html={`GitHub ${withTodos(site.github)}`} /> : <a href={site.github}>GitHub</a>}
+      </p>
+    </footer>
+  </body>
+</html>

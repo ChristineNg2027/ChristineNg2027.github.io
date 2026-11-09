@@ -1,0 +1,106 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PreVisionDiagram from '../components/PreVisionDiagram.astro';
+import portrait from '../assets/christine-ng.jpg';
+import { site } from '../site';
+import { url, isTodo, withTodos } from '../lib/util';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const plainName = site.name.replace(/\s*\[\[TODO\b[\s\S]*?\]\]/g, '');
+---
+
+<Base title={plainName} showHeader={false}>
+  <div class="intro">
+    <Image
+      class="portrait"
+      src={portrait}
+      alt="Portrait of Christine Ng"
+      width={360}
+      widths={[240, 360]}
+      sizes="(max-width: 600px) 120px, 180px"
+      format="webp"
+      quality={80}
+      loading="eager"
+    />
+    <div class="intro-text">
+      <h1 set:html={withTodos(site.name)} />
+      <section class="bio" aria-label="About me">
+        <p>
+          I'm a computer science student at the University of Washington, graduating in December 2026. I do research in
+          the Programmable Matter Lab, where I build tools that turn photos of hand-bent wire into machine-ready designs,
+          and I recently joined the Wearable Intelligence Lab.
+        </p>
+        <p>
+          I'm interested in AI that helps people while they work with their hands. Observing more is not the same as
+          understanding what matters in the moment, so my <a href={url('pre-vision/')}>current project</a> asks when a
+          system has enough evidence, from sight and sound, to act at the right time.
+        </p>
+      </section>
+    </div>
+  </div>
+
+  <nav class="links" aria-label="Links">
+    <ul>
+      <li><a href={url(site.cv)}>CV (PDF)</a></li>
+      <li>
+        {isTodo(site.github) ? <span set:html={`GitHub ${withTodos(site.github)}`} /> : <a href={site.github}>GitHub</a>}
+      </li>
+      <li>
+        {
+          isTodo(site.email) ? (
+            <span set:html={`Email ${withTodos(site.email)}`} />
+          ) : (
+            <a href={`mailto:${site.email}`}>Email</a>
+          )
+        }
+      </li>
+      {
+        site.extraLinks.map((l) => (
+          <li>
+            <a href={l.href}>{l.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <section aria-labelledby="projects-heading">
+    <h2 id="projects-heading">Projects</h2>
+    <ul class="cards">
+      {
+        projects.map((p) => (
+          <li class="card">
+            {/* Card images are decorative: the title link and text carry the meaning. */}
+            {p.id === 'pre-vision' ? (
+              <div class="card-image card-image--diagram">
+                <PreVisionDiagram layout="wide" decorative />
+              </div>
+            ) : p.data.card.image ? (
+              <Image class="card-image" src={p.data.card.image} alt="" widths={[680, 1360]} sizes="(max-width: 712px) 100vw, 680px" format="webp" />
+            ) : (
+              <div class="card-image placeholder-box" set:html={withTodos('[[TODO: card image]]')} />
+            )}
+            <div class="card-body">
+              <h3>
+                {p.data.link ? (
+                  <a href={p.data.link}>
+                    {p.data.title}{' '}
+                    <span class="ext">
+                      code on GitHub<span aria-hidden="true"> ↗</span>
+                    </span>
+                  </a>
+                ) : (
+                  <a href={url(`${p.id}/`)}>{p.data.title}</a>
+                )}
+              </h3>
+              <p set:html={withTodos(p.data.card.line)} />
+              <p class="card-meta" set:html={withTodos(p.data.card.meta)} />
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>

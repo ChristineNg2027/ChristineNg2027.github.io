@@ -1,0 +1,135 @@
+---
+/**
+ * Pre-Vision architecture, drawn as inline SVG from the build plan (section 5.2):
+ * video + audio features → fusion (concatenation or a learned gate) → two heads
+ * (what comes next, when) → confidence → intervention policy → act now / wait / stay silent.
+ *
+ * Two layouts: wide (desktop and print) and tall (phones). CSS shows one.
+ * Colors come from the site's CSS variables, so it follows light/dark mode.
+ */
+interface Props {
+  /** "auto" switches by screen width; "wide" always uses the wide layout (e.g. on a card). */
+  layout?: 'auto' | 'wide';
+  /** Decorative copy (e.g. a card thumbnail): hidden from screen readers. */
+  decorative?: boolean;
+}
+const { layout = 'auto', decorative = false } = Astro.props;
+
+type Box = { x: number; y: number; w: number; h: number; lines: string[]; sub?: string[]; kind?: 'core' | 'out' };
+type Diagram = { id: string; w: number; h: number; boxes: Box[]; paths: string[] };
+
+const wide: Diagram = {
+  id: 'pv-wide',
+  w: 680,
+  h: 232,
+  boxes: [
+    { x: 0, y: 16, w: 92, h: 56, lines: ['Video', 'features'] },
+    { x: 0, y: 160, w: 92, h: 56, lines: ['Audio', 'features'] },
+    { x: 117, y: 76, w: 92, h: 80, lines: ['Fusion'], sub: ['concatenation', 'or a learned', 'gate'], kind: 'core' },
+    { x: 234, y: 16, w: 92, h: 56, lines: ['What comes', 'next'] },
+    { x: 234, y: 160, w: 92, h: 56, lines: ['When'] },
+    { x: 351, y: 90, w: 92, h: 52, lines: ['Confidence'] },
+    { x: 468, y: 80, w: 92, h: 72, lines: ['Intervention', 'policy'], kind: 'core' },
+    { x: 585, y: 26, w: 92, h: 40, lines: ['Act now'], kind: 'out' },
+    { x: 585, y: 96, w: 92, h: 40, lines: ['Wait'], kind: 'out' },
+    { x: 585, y: 166, w: 92, h: 40, lines: ['Stay silent'], kind: 'out' },
+  ],
+  paths: [
+    'M92 44 H104.5 V116 H115',
+    'M92 188 H104.5 V116 H115',
+    'M209 116 H221.5 V44 H232',
+    'M209 116 H221.5 V188 H232',
+    'M326 44 H338.5 V116 H349',
+    'M326 188 H338.5 V116 H349',
+    'M443 116 H466',
+    'M560 116 H572.5 V46 H583',
+    'M560 116 H583',
+    'M560 116 H572.5 V186 H583',
+  ],
+};
+
+const tall: Diagram = {
+  id: 'pv-tall',
+  w: 343,
+  h: 474,
+  boxes: [
+    { x: 0, y: 0, w: 155, h: 48, lines: ['Video features'] },
+    { x: 188, y: 0, w: 155, h: 48, lines: ['Audio features'] },
+    { x: 66, y: 84, w: 211, h: 60, lines: ['Fusion'], sub: ['concatenation or a learned gate'], kind: 'core' },
+    { x: 0, y: 180, w: 155, h: 48, lines: ['What comes next'] },
+    { x: 188, y: 180, w: 155, h: 48, lines: ['When'] },
+    { x: 86, y: 264, w: 171, h: 44, lines: ['Confidence'] },
+    { x: 86, y: 344, w: 171, h: 52, lines: ['Intervention policy'], kind: 'core' },
+    { x: 0, y: 432, w: 101, h: 40, lines: ['Act now'], kind: 'out' },
+    { x: 121, y: 432, w: 101, h: 40, lines: ['Wait'], kind: 'out' },
+    { x: 242, y: 432, w: 101, h: 40, lines: ['Stay silent'], kind: 'out' },
+  ],
+  paths: [
+    'M77.5 48 V66 H171.5 V82',
+    'M265.5 48 V66 H171.5 V82',
+    'M171.5 144 V162 H77.5 V178',
+    'M171.5 144 V162 H265.5 V178',
+    'M77.5 228 V246 H171.5 V262',
+    'M265.5 228 V246 H171.5 V262',
+    'M171.5 308 V342',
+    'M171.5 396 V414 H50.5 V430',
+    'M171.5 396 V430',
+    'M171.5 396 V414 H292.5 V430',
+  ],
+};
+
+const LINE = 15;
+const SUB = 13;
+/** Vertical centers for each text line, so the block is centered in its box. */
+function textRows(b: Box) {
+  const sub = b.sub ?? [];
+  const total = b.lines.length * LINE + sub.length * SUB;
+  const top = b.y + b.h / 2 - total / 2;
+  return [
+    ...b.lines.map((t, i) => ({ t, y: top + LINE / 2 + i * LINE, cls: 'dg-label' })),
+    ...sub.map((t, j) => ({ t, y: top + b.lines.length * LINE + SUB / 2 + j * SUB, cls: 'dg-sub' })),
+  ];
+}
+
+const label =
+  'Pre-Vision architecture. Video features and audio features are combined by fusion (concatenation or a learned gate). ' +
+  'Two heads predict what comes next and when. A confidence estimate feeds an intervention policy, which chooses to act now, wait, or stay silent.';
+
+const diagrams = layout === 'wide' ? [wide] : [wide, tall];
+---
+
+<div class:list={['diagram', layout === 'auto' && 'diagram--auto']}>
+  {
+    diagrams.map((d) => (
+      <svg
+        class={`diagram-${d.id}`}
+        viewBox={`-2 -2 ${d.w + 4} ${d.h + 4}`}
+        width={d.w}
+        height={d.h}
+        role={decorative ? undefined : 'img'}
+        aria-label={decorative ? undefined : label}
+        aria-hidden={decorative ? 'true' : undefined}
+        focusable="false"
+      >
+        <defs>
+          <marker id={`${d.id}-arrow`} viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0 0 L8 4 L0 8 z" class="dg-arrowhead" />
+          </marker>
+        </defs>
+        {d.paths.map((p) => (
+          <path d={p} class="dg-line" marker-end={`url(#${d.id}-arrow)`} />
+        ))}
+        {d.boxes.map((b) => (
+          <g>
+            <rect x={b.x} y={b.y} width={b.w} height={b.h} rx={b.kind === 'out' ? b.h / 2 : 6} class={`dg-box dg-box--${b.kind ?? 'plain'}`} />
+            {textRows(b).map((r) => (
+              <text x={b.x + b.w / 2} y={r.y} class={r.cls} text-anchor="middle" dominant-baseline="central">
+                {r.t}
+              </text>
+            ))}
+          </g>
+        ))}
+      </svg>
+    ))
+  }
+</div>

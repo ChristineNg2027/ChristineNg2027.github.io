@@ -1,0 +1,14 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectPage from '../components/ProjectPage.astro';
+
+export async function getStaticPaths() {
+  // Card-only projects (with an external `link`) get no page.
+  const projects = await getCollection('projects', (e) => !e.data.link);
+  return projects.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+---
+
+<ProjectPage entry={entry} />

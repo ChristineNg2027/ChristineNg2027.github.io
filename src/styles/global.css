@@ -1,0 +1,573 @@
+/* ---------- Tokens ---------- */
+:root {
+  color-scheme: light dark;
+
+  --bg: #fcfcfa;
+  --surface: #f3f2ee;
+  --text: #1d1d1b;
+  --muted: #5b5a55;
+  --border: #dddbd5;
+  --accent: #1f5ca8;
+  --accent-hover: #163f73;
+  --tag-bg: #e6eefa;
+  --tag-text: #1a4a85;
+  --scroll-shadow: rgba(0, 0, 0, 0.18);
+
+  --measure: 680px;
+  --gutter: 16px;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --radius: 6px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615;
+    --surface: #20201e;
+    --text: #e8e7e3;
+    --muted: #a6a59f;
+    --border: #383834;
+    --accent: #8cb6ee;
+    --accent-hover: #b5d0f5;
+    --tag-bg: #1f2d42;
+    --tag-text: #b5d0f5;
+    --scroll-shadow: rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1.0625rem; /* 17px */
+  line-height: 1.65;
+  overflow-wrap: break-word;
+}
+
+.wrap {
+  width: min(100% - 2 * var(--gutter), var(--measure));
+  margin-inline: auto;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+h1 {
+  font-size: 2rem;
+  margin: 0 0 0.25rem;
+}
+h2 {
+  font-size: 1.3rem;
+  margin: 2.5rem 0 0.75rem;
+}
+h3 {
+  font-size: 1.05rem;
+  margin: 0 0 0.25rem;
+}
+
+p,
+ul,
+ol {
+  margin: 0 0 1rem;
+}
+li + li {
+  margin-top: 0.4rem;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.15em;
+}
+a:hover {
+  color: var(--accent-hover);
+}
+a:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+}
+
+/* ---------- Skip link ---------- */
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: -3rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  z-index: 10;
+}
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+/* ---------- Header / footer ---------- */
+.site-header {
+  padding-block: 1.5rem 0;
+  font-size: 0.95rem;
+}
+.site-header a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.site-header a:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+main {
+  padding-block: 2.5rem 3rem;
+}
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding-block: 1.25rem 2.5rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.site-footer p {
+  margin: 0;
+}
+
+/* ---------- Home ---------- */
+.intro {
+  display: grid;
+  grid-template-columns: 1fr 180px;
+  gap: 2rem;
+  align-items: start;
+  margin-bottom: 0.5rem;
+}
+.intro h1 {
+  margin-bottom: 1rem;
+}
+.portrait {
+  grid-column: 2;
+  grid-row: 1;
+  width: 180px;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 50% 30%;
+  border-radius: var(--radius);
+}
+.intro-text {
+  grid-column: 1;
+  grid-row: 1;
+}
+@media (max-width: 600px) {
+  .intro {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .portrait,
+  .intro-text {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .portrait {
+    width: 120px;
+  }
+}
+
+.links ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+}
+.links li + li {
+  margin-top: 0;
+}
+
+.cards {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+.cards li + li {
+  margin-top: 0;
+}
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: relative;
+}
+.card:hover {
+  border-color: var(--muted);
+}
+.card-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  object-fit: cover;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.card-image--diagram {
+  display: grid;
+  place-items: center;
+  padding: 1rem 1.25rem;
+}
+.card-image--diagram .diagram {
+  width: 100%;
+}
+.card .placeholder-box {
+  padding: 1rem;
+  text-align: center;
+}
+.card-body {
+  padding: 1rem 1.1rem 0.9rem;
+}
+.card-body p {
+  margin-bottom: 0.5rem;
+}
+/* Whole card is clickable via the title link. */
+.card h3 a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.card .ext {
+  margin-left: 0.35rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+.card-meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ---------- Project page ---------- */
+.project-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.9rem;
+  margin-bottom: 1rem;
+}
+.status-tag {
+  margin: 0;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.glance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+  margin: 0 0 1.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border-radius: var(--radius);
+  font-size: 0.92rem;
+}
+.glance div {
+  display: flex;
+  gap: 0.4rem;
+}
+.glance dt {
+  color: var(--muted);
+}
+.glance dt::after {
+  content: ':';
+}
+.glance dd {
+  margin: 0;
+}
+
+figure {
+  margin: 0 0 1.5rem;
+}
+figcaption {
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.hero-placeholder,
+.media-placeholder {
+  aspect-ratio: 16 / 9;
+}
+.prose figure {
+  margin-block: 1.5rem;
+}
+.note {
+  margin-top: 2rem;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--border);
+  background: var(--surface);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 0.95rem;
+}
+.caption {
+  margin-top: -0.25rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ---------- Diagrams (inline SVG) ---------- */
+.diagram svg {
+  width: 100%;
+  height: auto;
+}
+.diagram--auto .diagram-pv-tall {
+  display: none;
+}
+@media (max-width: 560px) {
+  .diagram--auto .diagram-pv-wide {
+    display: none;
+  }
+  .diagram--auto .diagram-pv-tall {
+    display: block;
+  }
+}
+.dg-box {
+  fill: var(--bg);
+  stroke: var(--border);
+  stroke-width: 1.25;
+}
+.dg-box--core {
+  fill: var(--surface);
+  stroke: var(--muted);
+}
+.dg-box--out {
+  fill: var(--tag-bg);
+  stroke: var(--accent);
+}
+.dg-label {
+  fill: var(--text);
+  font: 600 13px var(--font);
+}
+.dg-sub {
+  fill: var(--muted);
+  font: 400 11px var(--font);
+}
+.dg-box--out + .dg-label {
+  fill: var(--tag-text);
+}
+.dg-line {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.25;
+}
+.dg-arrowhead {
+  fill: var(--muted);
+}
+
+/* ---------- Prose (Markdown content) ---------- */
+.prose > :first-child {
+  margin-top: 0;
+}
+.prose ul {
+  padding-left: 1.25rem;
+}
+
+/* Scrolls sideways on narrow screens; edge shadows appear only when there is
+   more table to scroll to (pure CSS: the cover gradients scroll with content). */
+.table-scroll {
+  overflow-x: auto;
+  margin: 0 0 1rem;
+  background:
+    linear-gradient(to right, var(--bg) 30%, transparent) left / 40px 100% no-repeat local,
+    linear-gradient(to left, var(--bg) 30%, transparent) right / 40px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, var(--scroll-shadow), transparent) left / 12px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, var(--scroll-shadow), transparent) right / 12px 100% no-repeat scroll;
+}
+/* Wide numeric tables (4+ columns) keep each cell on one line and scroll;
+   narrow text tables wrap normally. */
+table:has(th:nth-child(4)) td {
+  white-space: nowrap;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.92rem;
+  font-variant-numeric: tabular-nums;
+}
+th,
+td {
+  text-align: left;
+  padding: 0.45rem 0.75rem 0.45rem 0;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+th {
+  min-width: 6.5em;
+  font-weight: 600;
+  border-bottom-width: 2px;
+}
+
+/* ---------- Placeholders (replaced before launch; see docs/site-todos.md) ---------- */
+.placeholder-tag {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.placeholder {
+  color: var(--muted);
+  font-style: italic;
+}
+.placeholder-box,
+.hero-placeholder {
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.card .placeholder-box {
+  border: 0;
+  border-bottom: 1px dashed var(--border);
+  border-radius: 0;
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.7rem;
+  }
+  main {
+    padding-block: 1.75rem 2.5rem;
+  }
+}
+
+/* ---------- Print ---------- */
+@media print {
+  @page {
+    size: letter;
+    margin: 0.5in 0.6in 0.6in;
+  }
+  :root {
+    /* Always print in the light palette. */
+    --bg: #ffffff;
+    --surface: #f3f2ee;
+    --text: #1d1d1b;
+    --muted: #5b5a55;
+    --border: #d4d2cb;
+    --accent: #1f5ca8;
+    --tag-bg: #e6eefa;
+    --tag-text: #1a4a85;
+    --measure: 100%;
+  }
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  body {
+    font-size: 10pt;
+    line-height: 1.4;
+  }
+  p,
+  ul,
+  ol {
+    margin-bottom: 0.55rem;
+  }
+  li + li {
+    margin-top: 0.2rem;
+  }
+  .glance {
+    padding: 0.5rem 0.8rem;
+    margin-bottom: 1rem;
+  }
+  figure {
+    margin-bottom: 0.9rem;
+  }
+  th,
+  td {
+    padding-block: 0.25rem;
+  }
+  .wrap {
+    width: 100%;
+  }
+  main {
+    padding-block: 0.5rem 0;
+  }
+  .skip-link,
+  .hero-placeholder,
+  .media-placeholder {
+    display: none;
+  }
+  .site-header {
+    padding-top: 0;
+  }
+  h1 {
+    font-size: 20pt;
+  }
+  h2 {
+    font-size: 12.5pt;
+    margin: 1.1rem 0 0.4rem;
+    break-after: avoid;
+  }
+  h2 + * {
+    break-before: avoid;
+  }
+  figure,
+  table,
+  tr,
+  .glance,
+  .note {
+    break-inside: avoid;
+  }
+  a {
+    color: var(--accent);
+  }
+  /* Wide diagram fits the printed page; never the tall phone layout. */
+  .diagram--auto .diagram-pv-wide {
+    display: block;
+  }
+  .diagram--auto .diagram-pv-tall {
+    display: none;
+  }
+  .hero .diagram {
+    max-width: 78%;
+    margin-inline: auto;
+  }
+  .table-scroll {
+    overflow: visible;
+    background: none;
+  }
+  .site-footer {
+    margin-top: 1.5rem;
+    padding-bottom: 0;
+  }
+}
