@@ -11,7 +11,7 @@ import { chromium } from 'playwright-core';
 
 const BASE = process.argv[2] ?? 'http://localhost:4321/';
 const OUT = new URL('../screenshots/', import.meta.url).pathname;
-const pages = ['', 'pre-vision/', 'wire-bending/'];
+const pages = ['', 'pre-vision/', 'wire-bending/', 'map-prefetch/'];
 const viewports = { phone: { width: 375, height: 812 }, desktop: { width: 1280, height: 900 } };
 const origin = new URL(BASE).origin;
 

@@ -326,6 +326,13 @@ figcaption {
 .media-placeholder {
   aspect-ratio: 16 / 9;
 }
+.hero-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
 .prose figure {
   margin-block: 1.5rem;
 }
@@ -570,4 +577,8 @@ th {
     margin-top: 1.5rem;
     padding-bottom: 0;
   }
+}
+
+.nowrap {
+  white-space: nowrap;
 }

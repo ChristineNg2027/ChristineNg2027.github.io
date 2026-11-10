@@ -20,11 +20,17 @@ const projects = defineCollection({
         /** External link for card-only projects (e.g. a GitHub repo). */
         link: z.url().optional(),
         /** The one-line "at a glance" box: label/value pairs. */
-        glance: z.array(z.object({ label: z.string(), value: z.string() })).optional(),
+        glance: z.array(z.object({ label: z.string(), value: z.string(), href: z.url().optional() })).optional(),
         hero: z
           .object({
-            kind: z.enum(['video', 'diagram']),
+            kind: z.enum(['video', 'diagram', 'image']),
             caption: z.string(),
+            /** For kind 'image': the picture, relative to the Markdown file, and its alt text. */
+            image: image().optional(),
+            alt: z.string().optional(),
+          })
+          .refine((h) => h.kind !== 'image' || (h.image && h.alt), {
+            message: "A hero of kind 'image' needs `image` and `alt`.",
           })
           .optional(),
         card: z.object({

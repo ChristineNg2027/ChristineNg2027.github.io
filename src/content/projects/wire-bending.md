@@ -8,12 +8,17 @@ glance:
   - { label: Status, value: Ongoing }
   - { label: Tools, value: 'Python, OpenCV, Blender' }
   - { label: Guided by, value: Prof. Martin Nisser }
+# TODO(video): this static image stands in for the project video. When the video is ready,
+# switch to `kind: video` and update the caption (see docs/site-todos.md).
 hero:
-  kind: video
-  caption: '[[TODO: project video]]'
+  kind: image
+  image: ../../assets/wirebending-machine.png
+  alt: 'Blender model of the desktop wire-bending machine: an aluminium frame carrying the feed rollers, with the geared bending head at the front.'
+  caption: 'The lab’s desktop wire-bending machine, modelled in Blender. The simulation moves these parts through each bend to check for collisions before anything is made.'
 card:
   line: Recovering a 3D wire shape from a few photos of a hand-bent prototype, framed as finding the most probable wire.
   meta: 'Programmable Matter Lab, 2025–present'
+  image: ../../assets/wirebending-machine.png
 ---
 
 ## Before this

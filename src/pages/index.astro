@@ -28,14 +28,32 @@ const plainName = site.name.replace(/\s*\[\[TODO\b[\s\S]*?\]\]/g, '');
       <h1 set:html={withTodos(site.name)} />
       <section class="bio" aria-label="About me">
         <p>
-          I'm a computer science student at the University of Washington, graduating in December 2026. I do research in
-          the Programmable Matter Lab, where I build tools that turn photos of hand-bent wire into machine-ready designs,
-          and I recently joined the Wearable Intelligence Lab.
+          Hi! I'm Christine, a Computer Science student at the University of Washington who's excited about{' '}
+          <strong>multimodal AI, embodied intelligence, and human-AI interaction</strong>.
         </p>
         <p>
-          I'm interested in AI that helps people while they work with their hands. Observing more is not the same as
-          understanding what matters in the moment, so my <a href={url('pre-vision/')}>current project</a> asks when a
-          system has enough evidence, from sight and sound, to act at the right time.
+          I'm fascinated by how much we communicate through the ways we move, interact, and experience the world, often
+          without saying a word. This makes me curious about how we can build intelligent systems that go beyond simply
+          recognizing what they see, hear, or feel to understanding what's happening around us, anticipating what people
+          might need, and offering help at the right moment.
+        </p>
+        <p>
+          I've had the opportunity to explore these questions through several research projects. At UW's{' '}
+          <strong>Programmable Matter Lab</strong>, I work on{' '}
+          <a href={url('wire-bending/')}>computer vision and 3D reconstruction for computational fabrication</a>. At the{' '}
+          <strong>Wearable Intelligence Lab</strong>, I'm exploring how machine learning can help interpret tactile and
+          force signals for sensor-enabled medical palpation. I'm also working on{' '}
+          <a class="nowrap" href={url('pre-vision/')}><strong>Pre-Vision</strong></a>, an independent project investigating how visual
+          and auditory cues can help AI anticipate human actions and provide timely assistance.
+        </p>
+        <p>
+          What excites me most is bringing these ideas together to create technology that feels more natural to interact
+          with. I'm always eager to learn, explore new perspectives, and collaborate with people from different
+          backgrounds to make intelligent systems more intuitive, adaptive, and accessible.
+        </p>
+        <p>
+          Outside of research, I enjoy playing piano, discovering new music, and baking. I'm always happy to exchange music
+          recommendations!
         </p>
       </section>
     </div>

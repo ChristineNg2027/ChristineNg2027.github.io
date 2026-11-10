@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { render } from 'astro:content';
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import PreVisionDiagram from './PreVisionDiagram.astro';
 import { withTodos } from '../lib/util';
@@ -29,10 +30,16 @@ const Hero = heroes[entry.id];
 
     <dl class="glance" aria-label="At a glance">
       {
-        glance.map(({ label, value }) => (
+        glance.map(({ label, value, href }) => (
           <div>
             <dt>{label}</dt>
-            <dd set:html={withTodos(value)} />
+            {href ? (
+              <dd>
+                <a href={href}>{value}</a>
+              </dd>
+            ) : (
+              <dd set:html={withTodos(value)} />
+            )}
           </div>
         ))
       }
@@ -43,6 +50,16 @@ const Hero = heroes[entry.id];
         <figure class="hero">
           {Hero ? (
             <Hero />
+          ) : hero.kind === 'image' && hero.image ? (
+            <Image
+              class="hero-image"
+              src={hero.image}
+              alt={hero.alt ?? ''}
+              widths={[680, 1360]}
+              sizes="(max-width: 712px) 100vw, 680px"
+              format="webp"
+              loading="eager"
+            />
           ) : (
             <div class="hero-placeholder" aria-hidden="true" />
           )}
